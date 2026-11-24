@@ -1,0 +1,8 @@
+/* source("./") begrenzt Tailwind auf die Klassen dieses Artefakts. */
+@import 'tailwindcss' source('./');
+@import '../../shared/theme.css';
+
+/* Eigene Styles immer auf .jd-root beziehen, nie auf html/body. */
+.jd-root {
+  -webkit-font-smoothing: antialiased;
+}

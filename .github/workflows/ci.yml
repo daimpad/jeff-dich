@@ -1,0 +1,27 @@
+# Prüft jeden Pull Request: Lint, Formatierung, Build.
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run build
+      - name: PHP-Syntax des WordPress-Plugins
+        run: php -l wordpress/jd-artifacts/jd-artifacts.php
+      - name: Größen der Snippets
+        run: |
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat dist/manifest.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

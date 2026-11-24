@@ -1,0 +1,5 @@
+{
+  "title": "Scroll-Reveal",
+  "description": "Überschrift und Karten erscheinen beim Scrollen gestaffelt; die Linie wächst mit dem Scrollfortschritt.",
+  "libs": ["gsap", "scrolltrigger", "tailwind"]
+}

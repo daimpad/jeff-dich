@@ -1,0 +1,7 @@
+/*
+ * Schriften für Seiten (Dev-Server, GitHub-Pages-Vorschau, iframe-Modus).
+ * Selbst gehostet über Fontsource – keine Anfragen an Google (DSGVO).
+ * Eingebettete Artefakte (Shortcode/Snippet) nutzen stattdessen die Alata der WordPress-Seite.
+ */
+@import '@fontsource/alata/latin-400.css';
+@import '@fontsource/blaka/latin-400.css';

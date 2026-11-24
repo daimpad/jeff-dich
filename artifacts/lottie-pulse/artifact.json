@@ -1,0 +1,5 @@
+{
+  "title": "Lottie-Puls",
+  "description": "Spielt eine Lottie-Animation (JSON aus After Effects oder LottieFiles) ab; Hover beschleunigt sie.",
+  "libs": ["lottie", "tailwind"]
+}
