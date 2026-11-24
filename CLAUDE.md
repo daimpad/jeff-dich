@@ -32,6 +32,13 @@ Antworten und Kommentare auf Deutsch.
   dann `@import '../../shared/fonts/blaka.css'` in `style.css` ergänzen.
 - Schreibweise: „Jeff Dich Festival“ – kein Bindestrich, keine durchgehenden Versalien.
 
+## Marke (shared/brand, siehe shared/brand/README.md)
+
+- Logos (Wortmarke, Monogramm; weiß/grün), Band-Figuren (bass, drums, gitarre, voice), Szenen (vulkan).
+- Logos per `?raw` inline; große Figuren/Szenen per `brandUrl()`/`loadSvg()` aus `shared/brand.js`
+  zur Laufzeit laden statt bündeln.
+- Logos nicht verzerren, umfärben nur in CI-Farben.
+
 ## Prüfen
 
 `npm run check` (Lint, Prettier, Build). Snippets > 150 KB per Shortcode statt Code-Modul einbinden.

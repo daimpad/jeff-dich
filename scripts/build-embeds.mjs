@@ -3,7 +3,8 @@
 //   dist/snippets/<id>.html    Element + Inline-Script zum Einfügen in ein Divi-Code-Modul / HTML-Block
 //   dist/standalone/<id>.html  vollständiges HTML-Dokument (z. B. für leere Seitenvorlagen)
 //   dist/manifest.json         Übersicht mit Größen
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+//   dist/brand/                Logos und Figuren aus shared/brand (für brandUrl())
+import { cpSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { build } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
@@ -78,3 +79,4 @@ for (const id of listArtifacts()) {
 }
 
 writeFileSync(resolve(DIST, 'manifest.json'), JSON.stringify(manifest, null, 2));
+cpSync(resolve(ROOT, 'shared/brand'), resolve(DIST, 'brand'), { recursive: true });

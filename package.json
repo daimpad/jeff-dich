@@ -12,6 +12,7 @@
     "new": "node scripts/new-artifact.mjs",
     "build": "vite build && node scripts/build-embeds.mjs",
     "build:plugin": "node scripts/zip-plugin.mjs",
+    "svg": "svgo --config svgo.config.js",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -25,6 +26,7 @@
     "globals": "^17.14.0",
     "prettier": "^3.10.1",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "svgo": "^4.1.0",
     "tailwindcss": "^4.3.5",
     "vite": "^8.3.8"
   },

@@ -18,7 +18,8 @@ npm run check                        # Lint, Formatierung, Build
 
 Ein Artefakt ist ein Ordner `artifacts/<id>/` mit `main.js` (exportiert `mount(root)`), `style.css`
 (Tailwind) und `artifact.json`. Enthalten: GSAP + ScrollTrigger, Three.js, Lottie, Tailwind CSS 4,
-Alata und Blaka (selbst gehostet).
+Alata und Blaka (selbst gehostet). Logos, Band-Figuren und Vulkan liegen in
+[`shared/brand`](shared/brand/README.md).
 
 ## Einbinden in Divi 5
 
