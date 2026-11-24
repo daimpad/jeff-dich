@@ -1,0 +1,5 @@
+{
+  "title": "Hero: Band vor dem Vulkan",
+  "description": "Hauptüberschrift in Blaka, die Band im gemeinsamen Takt vor der animierten Vulkan-Landschaft.",
+  "libs": ["gsap", "tailwind"]
+}

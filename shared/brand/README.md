@@ -75,10 +75,23 @@ denselben Variablen weiterhin, ist aber nur für eine einzelne, ruhige Figur gee
 Körper bzw. Oberkörper federn mit `-y` um 4–12 Einheiten. Größere Werte machen Schnittkanten sichtbar,
 weil unter den Teilen nichts gezeichnet ist. Beispiele: `artifacts/band-gitarre`, `artifacts/band-ensemble`.
 
+### Szene: Vulkan
+
+`szenen/vulkan.svg` ist ebenso gerigt: `himmel`, `rauch-mitte`, `rauch-links`, `rauch-rechts`, `herzen`, `lava`
+(`"glow": true` → `--lava-b` 1 … 1,4), `vordergrund`. Die animierte Landschaft dazu liegt in
+`shared/scenes/vulkan-landschaft.js` (`mountVulkanLandschaft(container)`): eigener Himmel, neu gezeichnete
+ferne Hügel (`shared/scenes/huegel.svg`), Nebel, Rauch, glühende Lava, Herz-Partikel aus dem Krater, Parallaxe
+über Scrollen und Zeiger, dunkelgrüner Schleier. Beispiele: `artifacts/vulkan-landschaft`, `artifacts/hero-band`.
+
+`mountRig(holder, path, { animated, hidden })` fasst bei Szenen alle unbewegten Ebenen zu wenigen Bildern
+zusammen (`animated`: bewegte Teile) und lässt Teile ganz weg (`hidden`). Unbewegte, glühende Teile bekommen
+eine einzige aufgehellte Überlagerung, deren Deckkraft `--<teil>-b` steuert.
+
 ### Regionen anpassen
 
 Regionen in `<figur>.rig.json` ändern, dann `npm run rig -- <figur>` (nie die SVG von Hand bearbeiten).
-Farbklassen: `dunkel`, `grau`, `rot`, `orange`, `gelb`, `gruen`, `blau`, `lila`, `pink`.
+Farbklassen: `dunkel`, `grau`, `rot`, `orange`, `gelb`, `gruen`, `blau`, `lila`, `pink`; exakte Farben per `fills`.
+Teile mit `"large": true` dürfen große Flächen übernehmen (z. B. einen Himmel).
 
 ## Neue Dateien
 

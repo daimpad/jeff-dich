@@ -41,6 +41,10 @@ Antworten und Kommentare auf Deutsch.
 - Band-Figuren mit `mountRig()` aus `shared/rig.js` darstellen (Bildebenen, GPU) und über CSS-Variablen
   `--<teil>-r/-x/-y/-s` an `rig.el` animieren; Ruhewert von `-s` ist 1. Teile und Grenzwerte: shared/brand/README.md.
 - Regionen in `<figur>.rig.json` ändern und danach `npm run rig -- <figur>` ausführen, nie die SVG von Hand.
+- Gemeinsame Bausteine: `shared/band.js` (`mountBand`), `shared/scenes/vulkan-landschaft.js`
+  (`mountVulkanLandschaft`). In `shared/` keine Tailwind-Klassen verwenden (Tailwind scannt nur den
+  Artefakt-Ordner) – dort Inline-Styles oder eigenes CSS.
+- GSAP-Tweens auf CSS-Variablen brauchen gesetzte Startwerte (`mountRig` setzt die Ruhewerte).
 - Animations-Schleifen exakt auf ihre Länge begrenzen (nichts über das Schleifenende hinaus), sonst laufen
   mehrere Figuren auseinander.
 
