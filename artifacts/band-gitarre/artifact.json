@@ -1,0 +1,5 @@
+{
+  "title": "Band: Gitarre (Rig-Test)",
+  "description": "Pilot für animierbare Band-Figuren: Kopfnicken, nachschwingende Haare, Anschlag, wippende Gitarre. Figur wird zur Laufzeit geladen.",
+  "libs": ["gsap", "tailwind"]
+}
