@@ -1,6 +1,7 @@
-// Zerlegt eine Figur aus shared/brand/band in animierbare Teile:  npm run rig -- gitarre
+// Zerlegt eine Figur (shared/brand/band) oder Szene (shared/brand/szenen) in animierbare Teile:
+//   npm run rig -- gitarre      npm run rig -- vulkan
 //
-// Eingabe:  shared/brand/band/<name>.svg  +  <name>.rig.json (Regionen, Drehpunkte, Hierarchie)
+// Eingabe:  <name>.svg  +  <name>.rig.json (Regionen, Drehpunkte, Hierarchie)
 // Ausgabe:  dieselbe SVG-Datei, ergänzt um
 //   - data-part="…" an jedem Pfad, dessen Mittelpunkt (und ggf. Farbe) zu einem Teil passt
 //   - <use>-Kopien großer, übergreifender Pfade, auf jede Teil-Region zugeschnitten. Die unterste
@@ -10,10 +11,14 @@
 //     Flächen werden in Zeichenreihenfolge zu Ebenen gruppiert, sodass sich überlappende Flächen
 //     ihre Reihenfolge behalten; jede Ebene kann dann als ein Bild gerastert und per GPU bewegt werden
 //   - einen <style data-rig="">, der jedem Teil eine Transformation aus CSS-Variablen gibt:
-//       --<teil>-r (Grad), --<teil>-x / --<teil>-y (viewBox-Einheiten), --<teil>-s (Skalierung)
+//       --<teil>-r (Grad), --<teil>-x / --<teil>-y (viewBox-Einheiten), --<teil>-s (Skalierung),
+//       --<teil>-o (Deckkraft) und – für Teile mit "glow": true – --<teil>-b (Helligkeit)
+//
+// Regel-Optionen in der rig.json: region, exclude, colors (Farbklassen), fills (exakte Füllfarben).
+// Teile mit "large": true dürfen auch große, übergreifende Flächen übernehmen (z. B. einen Himmel).
 // Die Zeichenreihenfolge der Pfade bleibt unverändert, das Aussehen in Ruhe also identisch.
 // Das Skript ist idempotent: vorhandene Rig-Daten werden vorher entfernt.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { svgPathBbox } from 'svg-path-bbox';
 import { ROOT } from './artifacts.mjs';
@@ -23,10 +28,15 @@ if (!name) {
   console.error('Aufruf: npm run rig -- <figur>   (z. B. gitarre)');
   process.exit(1);
 }
-const svgFile = resolve(ROOT, 'shared/brand/band', `${name}.svg`);
-const rig = JSON.parse(
-  readFileSync(resolve(ROOT, 'shared/brand/band', `${name}.rig.json`), 'utf8'),
-);
+const dir = ['band', 'szenen']
+  .map((d) => resolve(ROOT, 'shared/brand', d))
+  .find((d) => existsSync(resolve(d, `${name}.rig.json`)));
+if (!dir) {
+  console.error(`Keine ${name}.rig.json in shared/brand/band oder shared/brand/szenen.`);
+  process.exit(1);
+}
+const svgFile = resolve(dir, `${name}.svg`);
+const rig = JSON.parse(readFileSync(resolve(dir, `${name}.rig.json`), 'utf8'));
 const prefix = `${name}_svg__rig`;
 
 // ---------- vorhandenes Rig entfernen ----------
@@ -84,10 +94,11 @@ const viewBox = svg
   .match(/viewBox="([^"]*)"/)[1]
   .split(/[\s,]+/)
   .map(Number);
-const matches = (rule, center, color) =>
+const matches = (rule, center, color, fill) =>
   inPoly(center, rule.region) &&
   !(rule.exclude ?? []).some((poly) => inPoly(center, poly)) &&
-  (!rule.colors || rule.colors.includes(color));
+  (!rule.colors || rule.colors.includes(color)) &&
+  (!rule.fills || rule.fills.map((f) => f.toLowerCase()).includes(fill));
 
 // ---------- Pfade zuordnen ----------
 const counts = Object.fromEntries(rig.parts.map((p) => [p.name, 0]));
@@ -98,7 +109,17 @@ svg = svg.replace(/<path\b[^>]*\/>/g, (tag) => {
   const d = tag.match(/\sd="([^"]*)"/)?.[1];
   if (!d) return tag;
   const [x0, y0, x1, y1] = svgPathBbox(d);
+  const center = [(x0 + x1) / 2, (y0 + y1) / 2];
+  const fill = (tag.match(/fill="([^"]*)"/)?.[1] ?? '#000').toLowerCase();
+  const color = colorClass(fill);
+  const find = (parts) =>
+    parts.find((p) => p.rules.some((rule) => matches(rule, center, color, fill)));
   const spanning = x1 - x0 > viewBox[2] * 0.4 || y1 - y0 > viewBox[3] * 0.4;
+  const large = spanning && find(rig.parts.filter((p) => p.large));
+  if (large) {
+    counts[large.name]++;
+    return tag.replace('<path', `<path data-part="${large.name}"`);
+  }
   if (spanning) {
     // große Fläche (Silhouette): bleibt beim Root, Teile bekommen zugeschnittene Kopien
     const id = `${prefix}-base-${index++}`;
@@ -106,9 +127,7 @@ svg = svg.replace(/<path\b[^>]*\/>/g, (tag) => {
     baseBox[id] = [x0, y0, x1, y1];
     return tag.replace('<path', `<path id="${id}"`);
   }
-  const center = [(x0 + x1) / 2, (y0 + y1) / 2];
-  const color = colorClass(tag.match(/fill="([^"]*)"/)?.[1]);
-  const part = rig.parts.find((p) => p.rules.some((rule) => matches(rule, center, color)));
+  const part = find(rig.parts);
   if (!part) return tag;
   counts[part.name]++;
   return tag.replace('<path', `<path data-part="${part.name}"`);
@@ -216,7 +235,10 @@ const scope = `.rig-${name}`;
 const css = [
   `${scope} [data-rig-root],${scope} [data-part]{transform-box:view-box;transform-origin:0 0}`,
   `${scope} [data-rig-root]{transform:${step(rig.root.name, rig.root.pivot)}}`,
-  ...rig.parts.map((p) => `${scope} [data-part="${p.name}"]{transform:${chain(p)}}`),
+  ...rig.parts.map(
+    (p) =>
+      `${scope} [data-part="${p.name}"]{transform:${chain(p)};opacity:var(--${p.name}-o,1)${p.glow ? `;filter:brightness(var(--${p.name}-b,1))` : ''}}`,
+  ),
 ].join('');
 
 svg = svg

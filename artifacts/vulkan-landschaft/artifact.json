@@ -1,0 +1,5 @@
+{
+  "title": "Vulkan-Landschaft (Hintergrund)",
+  "description": "Animierter Hintergrund: Vulkan aus der CI mit glühender Lava, ziehendem Rauch, aufsteigenden Herzen, neu gezeichneten Hügeln, Nebel und Parallaxe.",
+  "libs": ["gsap", "tailwind"]
+}

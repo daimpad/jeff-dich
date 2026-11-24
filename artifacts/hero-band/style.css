@@ -1,0 +1,10 @@
+/* source("./") begrenzt Tailwind auf die Klassen dieses Artefakts. */
+@import 'tailwindcss' source('./');
+@import '../../shared/theme.css';
+/* Hauptüberschrift in Blaka – die WordPress-Seite lädt diese Schrift nicht selbst. */
+@import '../../shared/fonts/blaka.css';
+
+/* Eigene Styles immer auf .jd-root beziehen, nie auf html/body. */
+.jd-root {
+  -webkit-font-smoothing: antialiased;
+}

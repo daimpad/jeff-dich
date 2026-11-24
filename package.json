@@ -14,6 +14,7 @@
     "build:plugin": "node scripts/zip-plugin.mjs",
     "svg": "svgo --config svgo.config.js",
     "rig": "node scripts/rig-figure.mjs",
+    "sprites": "node scripts/extract-sprites.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
