@@ -1,5 +1,5 @@
 import gsap from 'gsap';
-import { loadSvg } from '../../shared/brand.js';
+import { mountRig } from '../../shared/rig.js';
 import { onVisibilityChange, prefersReducedMotion } from '../../shared/motion.js';
 
 // Takt: 120 BPM → ein Schlag = 0,5 s
@@ -17,31 +17,24 @@ export default function mount(root) {
   let stopObserving = () => {};
   let disposed = false;
 
-  loadSvg('band/gitarre.svg').then((markup) => {
-    if (disposed) return;
-    holder.innerHTML = markup;
-    const svg = holder.querySelector('svg');
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
+  let rig;
+  mountRig(holder, 'band/gitarre.svg').then((loaded) => {
+    rig = loaded;
+    if (disposed) return rig.destroy();
+    // Alle Teile werden über CSS-Variablen am Rig-Container bewegt (siehe npm run rig, shared/rig.js)
+    const svg = rig.el;
     if (prefersReducedMotion()) return;
 
-    // Alle Teile werden über CSS-Variablen am <svg> bewegt (siehe npm run rig).
     const v = (name) => `--${name}`;
     tl = gsap.timeline({ repeat: -1, paused: true });
 
-    // Körper federt auf jeden Schlag
-    tl.to(
-      svg,
-      {
-        [v('koerper-y')]: -10,
-        duration: BEAT * 0.4,
-        ease: 'power2.out',
-        repeat: 7,
-        yoyo: true,
-        repeatDelay: BEAT * 0.2,
-      },
-      0,
-    );
+    // Körper federt auf jeden Schlag (8 Schläge = Schleifenlänge)
+    for (let i = 0; i < 8; i++) {
+      tl.to(svg, { [v('koerper-y')]: -10, duration: BEAT * 0.4, ease: 'power2.out' }, i * BEAT).to(
+        svg,
+        { [v('koerper-y')]: 0, duration: BEAT * 0.5, ease: 'power2.in' },
+      );
+    }
 
     // Kopf nickt auf den Schlag (schnell runter, weich hoch)
     for (let i = 0; i < 4; i++) {
@@ -58,7 +51,7 @@ export default function mount(root) {
         i * BEAT * 2 + 0.08,
       )
         .to(svg, { [v('haare-r')]: 3, duration: BEAT * 0.6, ease: 'sine.inOut' })
-        .to(svg, { [v('haare-r')]: 0, duration: BEAT * 0.9, ease: 'sine.inOut' });
+        .to(svg, { [v('haare-r')]: 0, duration: BEAT * 0.9 - 0.08, ease: 'sine.inOut' });
     }
 
     // Anschlag in Achteln
@@ -90,5 +83,6 @@ export default function mount(root) {
     disposed = true;
     stopObserving();
     tl?.kill();
+    rig?.destroy();
   };
 }

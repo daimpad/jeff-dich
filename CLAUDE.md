@@ -38,8 +38,11 @@ Antworten und Kommentare auf Deutsch.
 - Logos per `?raw` inline; große Figuren/Szenen per `brandUrl()`/`loadSvg()` aus `shared/brand.js`
   zur Laufzeit laden statt bündeln.
 - Logos nicht verzerren, umfärben nur in CI-Farben.
-- Gerigte Figuren (`npm run rig -- <figur>`) über CSS-Variablen `--<teil>-r/-x/-y/-s` am `<svg>` animieren;
-  Regionen in `<figur>.rig.json` ändern und danach `npm run rig` erneut ausführen, nie die SVG von Hand.
+- Band-Figuren mit `mountRig()` aus `shared/rig.js` darstellen (Bildebenen, GPU) und über CSS-Variablen
+  `--<teil>-r/-x/-y/-s` an `rig.el` animieren; Ruhewert von `-s` ist 1. Teile und Grenzwerte: shared/brand/README.md.
+- Regionen in `<figur>.rig.json` ändern und danach `npm run rig -- <figur>` ausführen, nie die SVG von Hand.
+- Animations-Schleifen exakt auf ihre Länge begrenzen (nichts über das Schleifenende hinaus), sonst laufen
+  mehrere Figuren auseinander.
 
 ## Prüfen
 
