@@ -1,0 +1,3 @@
+/* Nur für Werkzeuge (Prettier-Klassensortierung, VS-Code-IntelliSense), nicht für Builds. */
+@import 'tailwindcss';
+@import './theme.css';

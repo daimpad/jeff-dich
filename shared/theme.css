@@ -1,0 +1,34 @@
+/*
+ * Design-Tokens nach der CI von https://jeff-dich.de/design/
+ *
+ * Farben (Tailwind-Klassen: bg-primary, text-secondary, ring-accent/40 …)
+ *   primary    Dunkelgrün  #002808  RAL 6009  Primärfarbe
+ *   secondary  Gelb/Gold   #E9B628  RAL 1028  Sekundärfarbe
+ *   accent     Lila        #8300E9  RAL 4008  Akzentfarbe
+ *   signal     Rot         #E42441  RAL 3020  Signalfarbe
+ * Die Tailwind-Standardpalette ist bewusst abgeschaltet, damit nur CI-Farben
+ * (plus Weiß/Schwarz und Abstufungen über Opazität, z. B. text-white/70) verwendet werden.
+ *
+ * Schriften
+ *   font-sans     Alata Regular – Überschriften und Fließtext
+ *   font-display  Blaka – nur für die Hauptüberschrift
+ * Auf jeff-dich.de lädt Divi die Alata bereits als "Alata Regular"; Artefakte nutzen sie mit.
+ * Blaka lädt die Seite nicht: Artefakte, die sie brauchen, importieren shared/fonts/blaka.css.
+ *
+ * Schreibweise: „Jeff Dich Festival“ – kein Bindestrich, keine durchgehenden Versalien
+ * (also kein `uppercase` auf den Namen anwenden).
+ */
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-primary: #002808;
+  --color-secondary: #e9b628;
+  --color-accent: #8300e9;
+  --color-signal: #e42441;
+
+  --font-sans: 'Alata Regular', 'Alata', Helvetica, Arial, sans-serif;
+  --font-display: 'Blaka', 'Alata Regular', 'Alata', serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}

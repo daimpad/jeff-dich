@@ -1,0 +1,21 @@
+name: Neues Artefakt
+description: Idee oder Auftrag für eine Animation / ein interaktives Element
+labels: [artefakt]
+body:
+  - type: textarea
+    id: ziel
+    attributes:
+      label: Was soll es leisten?
+      description: Inhalt, Wirkung, Interaktion
+    validations:
+      required: true
+  - type: input
+    id: ort
+    attributes:
+      label: Wo auf der Seite?
+      placeholder: z. B. Startseite, Hero-Bereich
+  - type: textarea
+    id: referenzen
+    attributes:
+      label: Referenzen und Material
+      description: Links, Skizzen, Lottie-Dateien, Bilder

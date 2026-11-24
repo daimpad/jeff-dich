@@ -1,0 +1,5 @@
+{
+  "title": "Partikelfeld",
+  "description": "Hero mit Hauptüberschrift in Blaka vor einer rotierenden Punktwolke (Three.js); folgt leicht dem Zeiger und pausiert außerhalb des Viewports.",
+  "libs": ["three", "tailwind"]
+}

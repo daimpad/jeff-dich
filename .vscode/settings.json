@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+  "files.associations": { "*.css": "tailwindcss" },
+  "tailwindCSS.experimental.configFile": "shared/tailwind.css",
+  "tailwindCSS.classFunctions": [],
+  "tailwindCSS.experimental.classRegex": [["innerHTML\\s*=\\s*`([^`]*)`", "class=\"([^\"]*)\""]],
+  "[php]": { "editor.defaultFormatter": null }
+}
