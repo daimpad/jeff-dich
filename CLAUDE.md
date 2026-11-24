@@ -48,6 +48,11 @@ Antworten und Kommentare auf Deutsch.
 - Animations-Schleifen exakt auf ihre Länge begrenzen (nichts über das Schleifenende hinaus), sonst laufen
   mehrere Figuren auseinander.
 
+## Mergen
+
+Eigene Pull Requests nach grüner CI ohne Konflikte direkt mergen (Squash), ohne auf Rückfrage zu warten.
+Dependabot-PRs merged der Job `automerge` in `.github/workflows/ci.yml`.
+
 ## Prüfen
 
 `npm run check` (Lint, Prettier, Build). Snippets > 150 KB per Shortcode statt Code-Modul einbinden.
