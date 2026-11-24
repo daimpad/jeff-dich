@@ -38,6 +38,8 @@ Antworten und Kommentare auf Deutsch.
 - Logos per `?raw` inline; große Figuren/Szenen per `brandUrl()`/`loadSvg()` aus `shared/brand.js`
   zur Laufzeit laden statt bündeln.
 - Logos nicht verzerren, umfärben nur in CI-Farben.
+- Gerigte Figuren (`npm run rig -- <figur>`) über CSS-Variablen `--<teil>-r/-x/-y/-s` am `<svg>` animieren;
+  Regionen in `<figur>.rig.json` ändern und danach `npm run rig` erneut ausführen, nie die SVG von Hand.
 
 ## Prüfen
 
