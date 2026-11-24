@@ -1,0 +1,54 @@
+# Veröffentlicht das WordPress-Plugin als GitHub-Release, sobald seine Version neu ist.
+# Neue Version: "Version:" im Kopf von wordpress/jd-artifacts/jd-artifacts.php erhöhen und mergen.
+name: Plugin-Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wordpress/jd-artifacts/**'
+      - '.github/workflows/release-plugin.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Version aus dem Plugin-Kopf lesen
+        id: version
+        run: |
+          v=$(sed -n 's/^ \* Version: *//p' wordpress/jd-artifacts/jd-artifacts.php | tr -d '[:space:]')
+          test -n "$v"
+          echo "value=$v" >> "$GITHUB_OUTPUT"
+      - name: PHP-Syntax prüfen
+        run: php -l wordpress/jd-artifacts/jd-artifacts.php
+      - name: Release erstellen (nur wenn die Version neu ist)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          tag="plugin-v$VERSION"
+          if gh release view "$tag" > /dev/null 2>&1; then
+            echo "Release $tag gibt es schon – nichts zu tun."
+            exit 0
+          fi
+          (cd wordpress && zip -rq ../jd-artifacts.zip jd-artifacts)
+          cat > notes.md <<NOTES
+          WordPress-Plugin **JD Artifacts $VERSION** – bindet die Design-Artefakte per Shortcode ein.
+
+          **Installieren:** WordPress → Plugins → Installieren → Plugin hochladen → \`jd-artifacts.zip\` → Aktivieren.
+          **Aktualisieren:** neue \`jd-artifacts.zip\` genauso hochladen und „Aktuelle Version ersetzen“ wählen.
+
+          **Verwenden (Divi 5):** Code- oder Text-Modul mit z. B. \`[jd_artifact id="hero-band" height="480"]\`.
+          Alle Artefakte: https://daimpad.github.io/jeff-dich/
+
+          Immer aktueller Download: https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/jd-artifacts.zip
+          NOTES
+          gh release create "$tag" jd-artifacts.zip \
+            --target "$GITHUB_SHA" \
+            --title "JD Artifacts $VERSION (WordPress-Plugin)" \
+            --notes-file notes.md
