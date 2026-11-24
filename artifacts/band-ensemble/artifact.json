@@ -1,0 +1,5 @@
+{
+  "title": "Band: Ensemble (Rig-Test)",
+  "description": "Alle vier Band-Figuren im selben Takt: Kopfnicken, Haare, Spielarme, Instrumente, Becken und Trommeln. Figuren werden zur Laufzeit geladen.",
+  "libs": ["gsap", "tailwind"]
+}
